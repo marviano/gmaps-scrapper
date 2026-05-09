@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "Gmaps Scrapper",
+  "version": "1.2.31",
+  "description": "Expand and collect Google Maps place reviews from the open side panel.",
+  "permissions": ["storage", "activeTab"],
+  "host_permissions": [
+    "https://www.google.com/maps/*",
+    "https://maps.google.com/maps/*",
+    "https://maps.google.com/*"
+  ],
+  "icons": {
+    "48": "ext-icons/icon48.png",
+    "128": "ext-icons/icon128.png"
+  },
+  "action": {
+    "default_title": "Gmaps Scrapper",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "48": "ext-icons/icon48.png",
+      "128": "ext-icons/icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.google.com/maps/*",
+        "https://maps.google.com/maps/*",
+        "https://maps.google.com/*"
+      ],
+      "js": ["selectors.js", "content.js"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ]
+}
