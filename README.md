@@ -168,4 +168,4 @@ This tool interacts with pages on `google.com` and `maps.google.com`. Automated 
 
 ## License
 
-[MIT](./LICENSE) © [marviano](https://github.com/marviano)
+[MIT](./LICENSE) © [marviano](https://github.com/marviano/gmaps-scrapper)
