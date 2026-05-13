@@ -1,4 +1,4 @@
-# Gmaps Scrapper
+# gmaps scraper
 
 > A Chrome extension that collects Google Maps place reviews from the open side panel and exports them as structured **JSON** or **CSV** — ready for analysis, reporting, or AI-assisted insights.
 
@@ -39,7 +39,7 @@ This extension is not on the Chrome Web Store. Install it as an unpacked extensi
 
 1. Clone or download this repository
    ```bash
-   git clone https://github.com/marviano/gmaps-scrapper.git
+   git clone https://github.com/marviano/gmaps-scraper.git
    ```
 2. Open `chrome://extensions` in Chrome
 3. Enable **Developer mode** (top-right toggle)
@@ -107,7 +107,7 @@ The popup includes a built-in prompt template (Tutorial → Slide 3) you can cop
 ## Repository Structure
 
 ```
-gmaps-scrapper/
+gmaps-scraper/
 ├── extension/
 │   ├── manifest.json        # MV3 manifest
 │   ├── selectors.js         # Centralized DOM selectors (hotfix-friendly)
@@ -168,4 +168,4 @@ This tool interacts with pages on `google.com` and `maps.google.com`. Automated 
 
 ## License
 
-[MIT](./LICENSE) © [marviano](https://github.com/marviano/gmaps-scrapper)
+[MIT](./LICENSE) © [marviano](https://github.com/marviano/gmaps-scraper)

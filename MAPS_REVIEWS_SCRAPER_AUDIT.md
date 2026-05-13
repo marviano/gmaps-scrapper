@@ -1,4 +1,4 @@
-# Gmaps Scrapper — Technical audit document
+# gmaps scraper — Technical audit document
 
 **Audience:** Human auditors and AI coding agents integrating or reviewing this Chrome extension (Manifest V3).  
 **Extension root:** `extension/` (manifest, popup, content script, selectors).

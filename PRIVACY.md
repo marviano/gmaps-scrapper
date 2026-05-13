@@ -1,6 +1,6 @@
 # Privacy Policy
 
-Gmaps Scrapper does not collect, transmit, or store any user data 
+gmaps scraper does not collect, transmit, or store any user data 
 on external servers. All scraped review data is stored locally in 
 your browser via chrome.storage.local and never leaves your device.
 

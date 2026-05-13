@@ -14,7 +14,7 @@ const BTC_WALLET_ADDRESS =
 
 const i18n = {
   en: {
-    title: "Gmaps Scrapper",
+    title: "gmaps scraper",
     tutorialTitle: "Tutorial Analisa Data Review Gmaps",
     statusIdle: "Idle. Ready to collect reviews.",
     statusNoTab: "No active tab.",
@@ -67,7 +67,7 @@ const i18n = {
     statusWalletCopyFailed: "Could not copy.",
   },
   id: {
-    title: "Gmaps Scrapper",
+    title: "gmaps scraper",
     tutorialTitle: "Tutorial Analisa Data Review Gmaps",
     statusIdle: "Siap. Tinggal mulai collect ulasan.",
     statusNoTab: "Tidak ada tab aktif.",
