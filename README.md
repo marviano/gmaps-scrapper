@@ -1,4 +1,4 @@
-# Gmaps Scrapper
+# Gmaps Scraper
 
 > A Chrome extension that collects Google Maps place reviews from the open side panel and exports them as structured **JSON** or **CSV** — ready for analysis, reporting, or AI-assisted insights.
 
