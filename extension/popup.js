@@ -1,5 +1,7 @@
 const STORAGE_KEY = "gmapsReviewsScraperLastRun";
 const STOP_SIGNAL_KEY = "gmapsReviewsScraperStopSignal";
+/** Persisted UI language: `"en"` | `"id"`. Unset defaults to English. */
+const LANG_STORAGE_KEY = "gmapsPopupUiLang";
 /** Match content.js: stale `running` → error so the UI is never stuck silent. */
 const STALE_RUNNING_MS = 3 * 60 * 1000;
 
@@ -52,8 +54,6 @@ const i18n = {
     reviewLimitCustomFieldLabel: "Exact count:",
     reviewLimitInvalidCustom: "Enter a whole number ≥ 1.",
     btnCsv: "Download CSV",
-    progressTarget: "{n} / {max} reviews collected",
-    progressUnknown: "{n} reviews collected…",
     manualStopWarning:
       "If collecting already reached the bottom and does not stop automatically, <strong>please press Stop manually.</strong>",
     walletCopyBtn: "Copy",
@@ -105,8 +105,6 @@ const i18n = {
     reviewLimitCustomFieldLabel: "Jumlah:",
     reviewLimitInvalidCustom: "Isi bilangan bulat ≥ 1.",
     btnCsv: "Unduh CSV",
-    progressTarget: "{n} / {max} ulasan terkumpul",
-    progressUnknown: "{n} ulasan terkumpul…",
     manualStopWarning:
       "Jika collecting sudah sampai paling bawah dan belum berhenti otomatis, <strong>harap tekan Stop manual.</strong>",
     walletCopyBtn: "Copy",
@@ -121,7 +119,7 @@ const i18n = {
   },
 };
 
-let currentLang = "id";
+let currentLang = "en";
 let lastDoneStamp = null;
 let lastStatusText = "";
 let currentSlideIdx = 0; // 0..(slides.length-1)
@@ -510,29 +508,6 @@ async function recoverStaleRunningIfNeeded(run) {
   return fixed;
 }
 
-function updateProgressUi(run) {
-  const wrap = document.getElementById("progress-wrap");
-  const bar = document.getElementById("collect-progress");
-  const label = document.getElementById("progress-label");
-  if (!wrap || !bar || !label) return;
-  if (!run || run.status !== "running") {
-    wrap.hidden = true;
-    return;
-  }
-  wrap.hidden = false;
-  const n = run.reviews?.length ?? 0;
-  const max = run.maxReviews;
-  if (typeof max === "number" && max > 0) {
-    bar.max = max;
-    bar.value = Math.min(n, max);
-    label.textContent = tr("progressTarget", { n, max });
-  } else {
-    bar.removeAttribute("value");
-    bar.removeAttribute("max");
-    label.textContent = tr("progressUnknown", { n });
-  }
-}
-
 async function refreshFromStorage() {
   const data = await chrome.storage.local.get(STORAGE_KEY);
   let run = data[STORAGE_KEY];
@@ -543,7 +518,6 @@ async function refreshFromStorage() {
     setButtons({ running: false, hasResult: false });
     setProcessing(false);
     setManualStopWarningVisible(false);
-    updateProgressUi(null);
     renderSlide(null);
     return;
   }
@@ -553,7 +527,6 @@ async function refreshFromStorage() {
     setButtons({ running: true, hasResult: (run.reviews?.length ?? 0) > 0 });
     setProcessing(true);
     setManualStopWarningVisible(true);
-    updateProgressUi(run);
     renderSlide(run);
     return;
   }
@@ -561,7 +534,6 @@ async function refreshFromStorage() {
   if (run.status === "done") {
     setProcessing(false);
     setManualStopWarningVisible(false);
-    updateProgressUi(null);
     setButtons({ running: false, hasResult: (run.reviews?.length ?? 0) > 0 });
     renderSlide(run);
 
@@ -591,7 +563,6 @@ async function refreshFromStorage() {
   if (run.status === "error") {
     setProcessing(false);
     setManualStopWarningVisible(false);
-    updateProgressUi(null);
     setStatus(tr("statusError", { error: run.error || "Unknown" }));
     setButtons({ running: false, hasResult: false });
     renderSlide(run);
@@ -601,7 +572,6 @@ async function refreshFromStorage() {
   if (run.status === "stopped") {
     setProcessing(false);
     setManualStopWarningVisible(false);
-    updateProgressUi(null);
     setStatus(tr("statusStopped", { count: run.reviews?.length ?? 0 }));
     setButtons({ running: false, hasResult: (run.reviews?.length ?? 0) > 0 });
     renderSlide(run);
@@ -610,7 +580,6 @@ async function refreshFromStorage() {
 
   setProcessing(false);
   setManualStopWarningVisible(false);
-  updateProgressUi(null);
   setStatus(tr("statusIdle"));
   setButtons({ running: false, hasResult: false });
   renderSlide(run);
@@ -625,12 +594,14 @@ chrome.storage.onChanged.addListener((changes, area) => {
 
 document.getElementById("lang-en").addEventListener("click", () => {
   currentLang = "en";
+  void chrome.storage.local.set({ [LANG_STORAGE_KEY]: "en" });
   applyLanguage();
   refreshFromStorage();
 });
 
 document.getElementById("lang-id").addEventListener("click", () => {
   currentLang = "id";
+  void chrome.storage.local.set({ [LANG_STORAGE_KEY]: "id" });
   applyLanguage();
   refreshFromStorage();
 });
@@ -741,4 +712,16 @@ document.getElementById("csv").addEventListener("click", async () => {
 });
 
 applyLanguage();
-refreshFromStorage();
+void (async () => {
+  try {
+    const data = await chrome.storage.local.get(LANG_STORAGE_KEY);
+    const saved = data[LANG_STORAGE_KEY];
+    if ((saved === "en" || saved === "id") && saved !== currentLang) {
+      currentLang = saved;
+      applyLanguage();
+    }
+  } catch {
+    /* ignore */
+  }
+  void refreshFromStorage();
+})();

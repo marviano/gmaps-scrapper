@@ -46,6 +46,13 @@ const MORE_REVIEWS_PATTERNS = [
   /\bother reviews\b/i,
   /\bsee more reviews\b/i,
   /\bshow more reviews\b/i,
+  /\bview more reviews\b/i,
+  /\bview all reviews\b/i,
+  /\bsee all reviews\b/i,
+  /\bshow all reviews\b/i,
+  /\bview more\b.*\breviews?\b/i,
+  /\bsee more\b.*\breviews?\b/i,
+  /\bshow more\b.*\breviews?\b/i,
   /\bload more\b/i,
   /\bulasan lainnya\b/i,
   /\blihat ulasan lainnya\b/i,
@@ -661,7 +668,8 @@ function queryExpandReviewTargets(scope) {
       normalizeAria(node.getAttribute("aria-label") || "") +
       "\n" +
       normalizeAria(node.innerText || node.textContent || "");
-    if (matchesAny(MORE_REVIEWS_PATTERNS, blob)) return;
+    /** Pagination ("see more reviews") shares `expandReview` jsaction with truncators; only skip MORE when not force-included. */
+    if (!forceInclude && matchesAny(MORE_REVIEWS_PATTERNS, blob)) return;
     if (!forceInclude && !matchesAny(EXPAND_TRUNCATED_LABEL, blob)) return;
     out.push(node);
   }
@@ -699,6 +707,10 @@ function queryMoreReviewsButtons(scope) {
   }
   for (const el of deepQueryScoped(scope, sel().roleButtonVirtual)) {
     consider(el);
+  }
+  /** English Maps often puts lazy-load on `[jsaction*="expandReview"]` that is not a native `<button>`. */
+  for (const el of deepQueryScoped(scope, sel().expandReviewJsaction)) {
+    if (el instanceof HTMLElement) consider(el);
   }
   return dedupePreferLarger(found).slice(0, 8);
 }

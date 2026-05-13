@@ -4,7 +4,7 @@
  */
 globalThis.__GMAPS_SEL = Object.freeze({
   /** Increment when bundled defaults change meaningfully */
-  VERSION: 3,
+  VERSION: 4,
 
   headingSelectors:
     'h2.kPvgOb.fontHeadlineSmall, h2[class*="fontHeadlineSmall"][class*="kPvgOb"], ' +
@@ -32,7 +32,8 @@ globalThis.__GMAPS_SEL = Object.freeze({
 
   expandReviewJsaction: '[jsaction*="expandReview"]',
   expandReviewLainnya:
-    'button[aria-label*="lainnya" i], [role="button"][aria-label*="lainnya" i], span[aria-label*="lainnya" i]',
+    'button[aria-label*="lainnya" i], [role="button"][aria-label*="lainnya" i], span[aria-label*="lainnya" i], ' +
+    'button[aria-label*="more reviews" i], [role="button"][aria-label*="more reviews" i]',
   ariaExpandedFalse:
     'button[aria-expanded="false"], [role="button"][aria-expanded="false"]',
   allButtons: "button",

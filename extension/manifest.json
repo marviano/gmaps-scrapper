@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "gmaps scraper",
-  "version": "1.2.31",
+  "version": "1.2.34",
   "description": "Expand and collect Google Maps place reviews from the open side panel.",
   "permissions": ["storage", "activeTab"],
   "host_permissions": [
